@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Players : MonoBehaviour {
+public class Players  {
     public string Room_Name { get; set; }
 
-    public string ID { get; set; }
 
     public GameObject Player { get; set; }
-
 
 }
