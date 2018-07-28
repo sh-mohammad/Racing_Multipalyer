@@ -9,7 +9,12 @@ public class JsonHelper : MonoBehaviour {
         //        Debug.Log("in vector to json room :" + room);
         return string.Format(@"{{""X"":""{0}"",""Y"":""{1}"",""Z"":""{2}""}}", posion.x, posion.y, posion.z);
     }
-    
+    public static string QuaternionToJson(Quaternion quat)
+    {
+        return string.Format(@"{{""X"":""{0}"",""Y"":""{1}"",""Z"":""{2}""}}", quat.x, quat.y, quat.z);
+    }
+
+
     public static float GetFloatFromJson(JSONObject data, string key)
     {
         return float.Parse(data[key].ToString().Replace("\"", ""));

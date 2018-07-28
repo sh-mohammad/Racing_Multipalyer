@@ -33,7 +33,8 @@ public class PlayerController : MonoBehaviour {
         }
         if (currentrotation != oldrotation)
         {
-            NetworkManager.CammandRotate(currentrotation);
+            NetworkManager.CammandRotate(transform.rotation);
+            Debug.Log("currentrotaiton " + transform.rotation);
             oldrotation = currentrotation;
         }
     }

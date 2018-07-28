@@ -29,8 +29,15 @@ public class NetworkManager : MonoBehaviour {
         Socket.On("requestposition", onrequestposition);
         Socket.On("updatap", OnUpdateP);
         Socket.On("move", OnMove);
+        Socket.On("rotate", OnRotate);
 
         players = new Dictionary<string, Players>();
+    }
+
+    private void OnRotate(SocketIOEvent obj)
+    {        
+        players[obj.data["id"].ToString()].Player.transform.Rotate(JsonHelper.GetFloatFromJson(obj.data, "X"), JsonHelper.GetFloatFromJson(obj.data, "Y"), JsonHelper.GetFloatFromJson(obj.data, "Z"));
+        Debug.Log("player rotate with id " + obj.data["id"].ToString() + "to ");
     }
 
     private void OnMove(SocketIOEvent obj)
@@ -50,7 +57,7 @@ public class NetworkManager : MonoBehaviour {
     //when myplayer rotated this function called
     public static void CammandRotate(Quaternion quat)
     {
-        Socket.Emit("player rotate");
+        Socket.Emit("player rotate", new JSONObject(JsonHelper.QuaternionToJson(quat)));
     }
     private void OnUpdateP(SocketIOEvent obj)
     {
