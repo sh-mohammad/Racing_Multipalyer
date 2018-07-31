@@ -38,10 +38,16 @@ public class NetworkManager : MonoBehaviour {
         Socket.On("rotate", OnRotate);
         Socket.On("listrooms", OnListRoom);
         Socket.On("password_errore", OnPasswordErrore);
+        Socket.On("client_disconnect", Onclientdisconnect);
         players = new Dictionary<string, Players>();
     }
 
-
+    private void Onclientdisconnect(SocketIOEvent obj)
+    {
+        Debug.Log("client disconnect " + obj.data["id"].ToString());
+        Destroy(players[JsonHelper.GetStringFromJson(obj.data["id"].ToString())].Player);
+        players.Remove(JsonHelper.GetStringFromJson(obj.data["id"].ToString()));
+    }
 
     private void OnListRoom(SocketIOEvent obj)
     {
@@ -68,7 +74,7 @@ public class NetworkManager : MonoBehaviour {
 
     private void OnRotate(SocketIOEvent obj)
     {        
-        players[obj.data["id"].ToString()].Player.transform.Rotate(JsonHelper.GetFloatFromJson(obj.data, "X"), JsonHelper.GetFloatFromJson(obj.data, "Y"), JsonHelper.GetFloatFromJson(obj.data, "Z"));
+        players[JsonHelper.GetStringFromJson(obj.data["id"].ToString())].Player.transform.Rotate(JsonHelper.GetFloatFromJson(obj.data, "X"), JsonHelper.GetFloatFromJson(obj.data, "Y"), JsonHelper.GetFloatFromJson(obj.data, "Z"));
         Debug.Log("player rotate with id " + obj.data["id"].ToString() + "to ");
     }
 
@@ -77,7 +83,7 @@ public class NetworkManager : MonoBehaviour {
         Debug.Log("player move with id " + obj.data["id"].ToString());
         Vector3 pos = new Vector3(JsonHelper.GetFloatFromJson(obj.data, "X"), JsonHelper.GetFloatFromJson(obj.data, "Y"), JsonHelper.GetFloatFromJson(obj.data, "Z"));
 
-        players[obj.data["id"].ToString()].Player.transform.position = pos;
+        players[JsonHelper.GetStringFromJson(obj.data["id"].ToString())].Player.transform.position = pos;
         Debug.Log("move player to " + pos + "id: " + obj.data["id"].ToString());
     }
 
@@ -96,7 +102,7 @@ public class NetworkManager : MonoBehaviour {
         
         Vector3 pos = new Vector3(JsonHelper.GetFloatFromJson(obj.data, "X"), JsonHelper.GetFloatFromJson(obj.data, "Y"), JsonHelper.GetFloatFromJson(obj.data, "Z"));
         
-        players[obj.data["id"].ToString()].Player.transform.position = pos;
+        players[JsonHelper.GetStringFromJson(obj.data["id"].ToString())].Player.transform.position = pos;
         Debug.Log("update Position" + obj.data + "id " + obj.data["id"].ToString() +  "Go to :" + pos);
 
 
@@ -117,7 +123,7 @@ public class NetworkManager : MonoBehaviour {
         Players p = new Players();
         p.Player = player;
         p.Room_Name = obj.data["room"].ToString();
-        players.Add(obj.data["id"].ToString(), p);
+        players.Add(JsonHelper.GetStringFromJson(obj.data["id"].ToString()), p);
         Debug.Log("in other spawner player spawn with id  " + obj.data["id"].ToString());
     }
 
@@ -137,7 +143,7 @@ public class NetworkManager : MonoBehaviour {
         Players p = new Players();
         p.Player = player;
         p.Room_Name = obj.data["room"].ToString();
-        players.Add(obj.data["id"].ToString(), p);
+        players.Add(JsonHelper.GetStringFromJson(obj.data["id"].ToString()), p);
         Debug.Log("joiner spawned to room: " + obj.data["room"] + "by id : " + obj.data["id"]);
     }
 
@@ -192,10 +198,6 @@ public class NetworkManager : MonoBehaviour {
         GameObject canvesss = GameObject.Find("Canvas Manager");
         canvesss.SetActive(false);
     }
-     
-
-
-   
 
 
 }
