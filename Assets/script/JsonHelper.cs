@@ -19,4 +19,8 @@ public class JsonHelper : MonoBehaviour {
     {
         return float.Parse(data[key].ToString().Replace("\"", ""));
     }
+    public static string GetStringFromJson(string line)
+    {
+        return line.Replace("\"", "");
+    }
 }
