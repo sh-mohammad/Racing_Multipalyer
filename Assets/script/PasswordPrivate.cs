@@ -6,10 +6,6 @@ using UnityEngine.UI;
 public class PasswordPrivate : MonoBehaviour {
     public GameObject password_Input;
     public Toggle Public;
-    public void Visible_Input_password()
-    {
-        
-    }
 
     public void Update()
     {

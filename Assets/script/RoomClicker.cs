@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class RoomClicker : MonoBehaviour {
     GameObject panelpasseord;
+
     private void Start()
     {
         panelpasseord = GameObject.Find("PanelPassword");

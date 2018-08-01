@@ -8,18 +8,18 @@ using System;
 
 public class NetworkManager : MonoBehaviour {
     static SocketIOComponent Socket;
-    public InputField room_name;
+    
     public GameObject PlayerPrefabe;
     public GameObject Canves;
     public GameObject MyPlayer;
-    public InputField Password_room;
+    
     public GameObject scrolcontent;
-    public Toggle Private;
+    
     private Dictionary<string, Players> players;
     public GameObject roomprefabe;
     public Sprite[] lock_unluck;
     public GameObject panel_password;
-    
+    public GameObject scorlview;
     // Use this for initialization
 
 
@@ -40,8 +40,10 @@ public class NetworkManager : MonoBehaviour {
         Socket.On("password_errore", OnPasswordErrore);
         Socket.On("client_disconnect", Onclientdisconnect);
         players = new Dictionary<string, Players>();
+        ScrollRect sr = scorlview.GetComponent<ScrollRect>();
+        
     }
-
+    
     private void Onclientdisconnect(SocketIOEvent obj)
     {
         Debug.Log("client disconnect " + obj.data["id"].ToString());
@@ -51,6 +53,7 @@ public class NetworkManager : MonoBehaviour {
 
     private void OnListRoom(SocketIOEvent obj)
     {
+        
        // Debug.Log("in Onlistroom name room is " + obj.data["name_room"].ToString().Trim() + obj.data["status"].ToString().Trim());
         GameObject newroom = Instantiate(roomprefabe) as GameObject;
         RoomContoller controller = newroom.GetComponent<RoomContoller>();
@@ -88,15 +91,7 @@ public class NetworkManager : MonoBehaviour {
     }
 
     //when myplayer moved this function called
-    public static void CammandMove(Vector3 vec3)
-    {
-        Socket.Emit("player move", new JSONObject(JsonHelper.VectorToJson(vec3)));
-    }
-    //when myplayer rotated this function called
-    public static void CammandRotate(Quaternion quat)
-    {
-        Socket.Emit("player rotate", new JSONObject(JsonHelper.QuaternionToJson(quat)));
-    }
+
     private void OnUpdateP(SocketIOEvent obj)
     {
         
@@ -175,29 +170,16 @@ public class NetworkManager : MonoBehaviour {
     void OnConnected(SocketIOEvent e){
 		Debug.Log ("this clint is connected with id : " + e.data["id"]);
 	}
-	// Update is called once per frame
-	public void CreateRoome(){
-        bool Status;
-        if (Private.GetComponent<Toggle>().isOn)
-        {
-     
-            Status = true;
-        }
-        else
-        {
-            Status = false;
-        }
-        
-        Socket.Emit ("createroom", new JSONObject (string.Format(@"{{""name"":""{0}"",""Password_Romm"":""{1}"",""Statuse"":""{2}""}}", room_name.text, Password_room.text, Status)));
-	}
+    // Update is called once per frame
 
-    static public void JoinRoome(string name, string password = "")
+     static public void JoinRoome(string name, string password = "")
     {
 
         Socket.Emit("jointoroom", new JSONObject(string.Format(@"{{""name"":""{0}"",""password"":""{1}""}}", name, password)));
-        GameObject canvesss = GameObject.Find("Canvas Manager");
-        canvesss.SetActive(false);
+        GameObject can = GameObject.Find("Canvas Manager");
+        can.SetActive(false);
     }
+
 
 
 }
