@@ -14,12 +14,11 @@ public class NetworkManager : MonoBehaviour {
     public GameObject MyPlayer;
     
     public GameObject scrolcontent;
-    
+    public static Dictionary<string, RoomContoller> RoomsPrefabe;
     private Dictionary<string, Players> players;
     public GameObject roomprefabe;
     public Sprite[] lock_unluck;
     public GameObject panel_password;
-    public GameObject scorlview;
     // Use this for initialization
 
 
@@ -39,9 +38,9 @@ public class NetworkManager : MonoBehaviour {
         Socket.On("listrooms", OnListRoom);
         Socket.On("password_errore", OnPasswordErrore);
         Socket.On("client_disconnect", Onclientdisconnect);
+
         players = new Dictionary<string, Players>();
-        ScrollRect sr = scorlview.GetComponent<ScrollRect>();
-        
+        RoomsPrefabe = new Dictionary<string, RoomContoller>();
     }
     
     private void Onclientdisconnect(SocketIOEvent obj)
@@ -70,9 +69,10 @@ public class NetworkManager : MonoBehaviour {
         }
         
         controller.Description.text = "number of player in this room " + obj.data["number_player_in_room"].ToString();
-        
         newroom.transform.parent = scrolcontent.transform;
         newroom.transform.localScale = Vector3.one;
+        RoomsPrefabe.Clear();
+        RoomsPrefabe.Add(controller.Name.text, controller);
     }
 
     private void OnRotate(SocketIOEvent obj)
