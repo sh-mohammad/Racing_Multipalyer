@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using SocketIO;
 public class RoomClicker : MonoBehaviour {
     GameObject panelpasseord;
-
+    public SocketIOComponent socket;
     private void Start()
     {
         panelpasseord = GameObject.Find("PanelPassword");
@@ -22,7 +22,8 @@ public class RoomClicker : MonoBehaviour {
         else
         {
 
-            NetworkManager.JoinRoome(C_R.Name.text);
+            JoinManager.JoinRoome(C_R.Name.text);
+
         }
 
     }

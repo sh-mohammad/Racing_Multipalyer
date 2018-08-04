@@ -8,7 +8,6 @@ public class PlayerController : MonoBehaviour {
     private Quaternion currentrotation;
     private Vector3 oldposition;
     private Quaternion oldrotation;
-    private NetworkMove netmove;
 
     // Use this for initialization
 
@@ -17,7 +16,6 @@ public class PlayerController : MonoBehaviour {
         currentrotation = oldrotation;
         oldposition = transform.position;
         currentPosition = oldposition;
-        netmove = gameObject.GetComponent<NetworkMove>();
 
 	}
 	
@@ -32,12 +30,12 @@ public class PlayerController : MonoBehaviour {
 
         if (currentPosition != oldposition)
         {
-            netmove.CammandMove(transform.position);
+            GameNetworkManager.CammandMove(transform.position);
             oldposition = currentPosition;
         }
         if (currentrotation != oldrotation)
         {
-            netmove.CammandRotate(transform.rotation);
+            GameNetworkManager.CammandRotate(transform.rotation);
             Debug.Log("currentrotaiton " + transform.rotation);
             oldrotation = currentrotation;
         }

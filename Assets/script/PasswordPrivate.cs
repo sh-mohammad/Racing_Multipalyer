@@ -12,12 +12,10 @@ public class PasswordPrivate : MonoBehaviour {
         if (this.gameObject.GetComponent<Toggle>().isOn)
         {
             password_Input.SetActive(true);
-            Public.GetComponent<Toggle>().isOn = false;
         }
         else
         {
             password_Input.SetActive(false);
-            Public.GetComponent<Toggle>().isOn = true;
         }
  
     }
