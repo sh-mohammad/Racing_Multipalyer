@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour {
     private Quaternion currentrotation;
     private Vector3 oldposition;
     private Quaternion oldrotation;
-
+    ShootMissile sm;
     // Use this for initialization
 
     void Start () {
@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour {
         currentrotation = oldrotation;
         oldposition = transform.position;
         currentPosition = oldposition;
-
+        sm = gameObject.GetComponent<ShootMissile>();
 	}
 	
 	// Update is called once per frame
@@ -38,6 +38,11 @@ public class PlayerController : MonoBehaviour {
             GameNetworkManager.CammandRotate(transform.rotation);
             Debug.Log("currentrotaiton " + transform.rotation);
             oldrotation = currentrotation;
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            GameNetworkManager.CammandFire();
+            sm.Fire();
         }
     }
 }

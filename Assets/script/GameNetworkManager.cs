@@ -28,15 +28,25 @@ public class GameNetworkManager : MonoBehaviour {
         Socket.On("rotate", OnRotate);
         Socket.On("client_disconnect", Onclientdisconnect);
         Socket.On("otherspawner", Onotherspawn);
-        
+        Socket.On("OnFire", OnFire);
 
     }
 
+    private void OnFire(SocketIOEvent obj)
+    {
+        ShootMissile shot = players[JsonHelper.GetStringFromJson(obj.data["id"].ToString())].Player.GetComponent<ShootMissile>();
+        Debug.Log("shot ");
+        shot.Fire();
+    }
 
     private void onrequestposition(SocketIOEvent obj)
     {
         Debug.Log("server is requestposition " + obj.data["room"].ToString());
         Socket.Emit("updateposition", new JSONObject(JsonHelper.VectorToJson(MyPlayer.transform.position)));
+    }
+    public static void CammandFire()
+    {
+        Socket.Emit("Fire");
     }
     public static void CammandMove(Vector3 vec3)
     {
@@ -44,6 +54,7 @@ public class GameNetworkManager : MonoBehaviour {
     }
     //when myplayer rotated this function called
     public static void CammandRotate(Quaternion quat)
+
     {
         Socket.Emit("player rotate", new JSONObject(JsonHelper.QuaternionToJson(quat)));
     }
@@ -71,8 +82,10 @@ public class GameNetworkManager : MonoBehaviour {
 
     private void OnRotate(SocketIOEvent obj)
     {
-        players[JsonHelper.GetStringFromJson(obj.data["id"].ToString())].Player.transform.Rotate(JsonHelper.GetFloatFromJson(obj.data, "X"), JsonHelper.GetFloatFromJson(obj.data, "Y"), JsonHelper.GetFloatFromJson(obj.data, "Z"));
-        Debug.Log("player rotate with id " + obj.data["id"].ToString() + "to ");
+        Vector3 r = new Vector3(JsonHelper.GetFloatFromJson(obj.data, "X"), JsonHelper.GetFloatFromJson(obj.data, "Y"), JsonHelper.GetFloatFromJson(obj.data, "Z"));
+        Debug.Log(r);
+        players[JsonHelper.GetStringFromJson(obj.data["id"].ToString())].Player.transform.eulerAngles = r;
+        Debug.Log("player rotate with id " + obj.data["id"].ToString() + "to " + players[JsonHelper.GetStringFromJson(obj.data["id"].ToString())].Player.transform.rotation);
     }
 
     private void OnMove(SocketIOEvent obj)

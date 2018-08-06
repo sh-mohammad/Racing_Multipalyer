@@ -11,7 +11,7 @@ public class JsonHelper : MonoBehaviour {
     }
     public static string QuaternionToJson(Quaternion quat)
     {
-        return string.Format(@"{{""X"":""{0}"",""Y"":""{1}"",""Z"":""{2}""}}", quat.x, quat.y, quat.z);
+        return string.Format(@"{{""X"":""{0}"",""Y"":""{1}"",""Z"":""{2}"",""W"":{3}}}", quat.x, quat.y, quat.z, quat.w);
     }
 
 
